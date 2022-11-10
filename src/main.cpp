@@ -36,19 +36,6 @@ void roomba_send_num(int num){  //numを二つの8bitに変換してルンバに
 }
 
 
-void startSafe() {  // start command (128) and safe mode (131)
-    Roomba.write(128); //start
-    Roomba.write(131); // safe mode
-    delay(100);
-}
-
-
-void startPassive(){  // passivemode
-    Roomba.write(128); // start
-    delay(100);
-}
-
-
 void roomba_drive(int right,int left) { // go advance
     Roomba.write(byte(145));
     roomba_send_num(right);  //Velocity right 
@@ -96,8 +83,6 @@ void setup() {
     }
     Serial.println("");
  
-    startSafe(); // StartコマンドでOI開始 ＆ Safe Modeにすることで、移動指示可能にする
-
     if (udp.listen(port)) {
         udp.onPacket([](AsyncUDPPacket packet) {
             buf[0]= (char)*(packet.data());
@@ -138,7 +123,7 @@ void loop() {
             roomba_drive_turn_clockwise(v); // right turn
             break;
         case 'J':
-            roomba_drive_turn_counterclockwise(v); //left turn
+            roomba_drive_turn_counterclockwise(v); // left turn
             break;
         case 'K':
             //stop_Stop();
